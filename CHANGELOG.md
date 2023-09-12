@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.0
+
+* Upgrades `faraday` and `faraday_middleware` dependency versions from v0 to v1. The previous versions prevent the application from using newer versions from other gems dependent on faraday.
+
 ## v2.4.0
 
 * Upgrades `faraday` and `faraday_middleware` dependency versions to use ones that works with ruby 3.0.
