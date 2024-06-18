@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.4.1
+
+* Upgrades `faraday` and `faraday_middleware` dependency versions to use versions 1.10 and 1.2, respectively.
+
 ## v2.4.0
 
 * Upgrades `faraday` and `faraday_middleware` dependency versions to use ones that works with ruby 3.0.
