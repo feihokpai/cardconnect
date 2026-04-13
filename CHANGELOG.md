@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.4.2
+
+* Add cof parameters (cof, cofpermission, and cofscheduled) in the list of optional request parameters. Before they didn't appear in any list of parameters.
+
 ## v2.4.1
 
 * Upgrades `faraday` and `faraday_middleware` dependency versions to use versions 1.10 and 1.2, respectively.
