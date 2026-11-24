@@ -64,7 +64,10 @@ describe CardConnect::Service::Inquire do
       service = CardConnect::Service::Inquire.new(connection)
       service.build_request(valid_inquire_request)
 
-      capture_io { service.submit.must_be_nil }
+      out, _err = capture_io { service.submit.must_be_nil }
+
+      out.must_include '404'
+      out.must_include path
       service.response.must_be_nil
     end
 

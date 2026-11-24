@@ -79,7 +79,10 @@ describe CardConnect::Service::Authorization do
       service = CardConnect::Service::Authorization.new(connection)
       service.build_request(valid_auth_request)
 
-      capture_io { service.submit.must_be_nil }
+      out, _err = capture_io { service.submit.must_be_nil }
+
+      out.must_include '404'
+      out.must_include '/cardconnect/rest/auth'
       service.response.must_be_nil
     end
 
