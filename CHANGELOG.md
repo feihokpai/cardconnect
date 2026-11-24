@@ -18,6 +18,7 @@
 * Constrains `minitest` to 5.x, since the test suite relies on the global expectations that Minitest 6 removed.
 * Adds the missing `errors` and `success?` to `CaptureResponse`, which had no way to report a declined (`respstat` C) or retry (`respstat` B) capture.
 * Runs the test suite against `json` 3, so the compatibility fixed in this release stays verified.
+* Replaces the defunct `.travis.yml` with a GitHub Actions matrix covering Ruby 3.0 to 3.4, `faraday` 2.14.4 and newer, and `json` 2 and 3.
 
 ## v2.4.2
 
