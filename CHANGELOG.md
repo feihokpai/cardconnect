@@ -6,6 +6,7 @@
 * Requires `faraday` 2.14.4 or newer, the first version that passes JSON parser options as keywords and therefore works with `json` 3. Earlier `faraday` 2.x versions raise `Faraday::ParsingError` when parsing responses with `json` 3.
 * Requires Ruby 3.0 or newer, the minimum `faraday` supports since 2.9. Ruby 2.x is no longer supported.
 * Removes the `bundler` development dependency, which pinned Bundler to 1.x and made `bundle install` fail on Ruby 3.
+* Constrains `minitest` to 5.x, since the test suite relies on the global expectations that Minitest 6 removed.
 
 ## v2.4.2
 

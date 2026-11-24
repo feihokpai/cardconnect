@@ -4,7 +4,7 @@ gem 'rake'
 gem 'yard'
 
 group :test do
-  gem 'minitest', '>= 5.4'
+  gem 'minitest', '~> 5.4'
 end
 
 # Specify your gem's dependencies in cardconnect.gemspec
