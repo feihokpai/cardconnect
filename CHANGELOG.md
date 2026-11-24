@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.0
+
+* Upgrades `faraday` dependency from v1 to v2. `faraday_middleware` was dropped because its JSON middleware is now part of `faraday`, and `basic_auth` was replaced by the `authorization` middleware.
+
 ## v2.4.2
 
 * Add cof parameters (cof, cofpermission, and cofscheduled) in the list of optional request parameters. Before they didn't appear in any list of parameters.
