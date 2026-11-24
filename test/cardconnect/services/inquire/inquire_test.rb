@@ -67,5 +67,20 @@ describe CardConnect::Service::Inquire do
       capture_io { service.submit.must_be_nil }
       service.response.must_be_nil
     end
+
+    it 'raises the client error when the api rejects the credentials' do
+      unauthorized = [401, { 'Content-Type' => 'application/json' }, '{"resptext":"Unauthorized"}']
+      path = "/cardconnect/rest/inquire/#{valid_inquire_request['retref']}/#{valid_inquire_request['merchid']}"
+
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.get(path) { unauthorized }
+      end
+
+      service = CardConnect::Service::Inquire.new(connection)
+      service.build_request(valid_inquire_request)
+
+      proc { service.submit }.must_raise Faraday::UnauthorizedError
+      service.response.must_be_nil
+    end
   end
 end

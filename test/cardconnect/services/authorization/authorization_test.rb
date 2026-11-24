@@ -82,5 +82,33 @@ describe CardConnect::Service::Authorization do
       capture_io { service.submit.must_be_nil }
       service.response.must_be_nil
     end
+
+    it 'raises the client error when the api rejects the credentials' do
+      unauthorized = [401, { 'Content-Type' => 'application/json' }, '{"resptext":"Unauthorized"}']
+
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.put('/cardconnect/rest/auth') { unauthorized }
+      end
+
+      service = CardConnect::Service::Authorization.new(connection)
+      service.build_request(valid_auth_request)
+
+      proc { service.submit }.must_raise Faraday::UnauthorizedError
+      service.response.must_be_nil
+    end
+
+    it 'raises the server error when the api fails' do
+      server_error = [500, { 'Content-Type' => 'application/json' }, '{"resptext":"Internal server error"}']
+
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.put('/cardconnect/rest/auth') { server_error }
+      end
+
+      service = CardConnect::Service::Authorization.new(connection)
+      service.build_request(valid_auth_request)
+
+      proc { service.submit }.must_raise Faraday::ServerError
+      service.response.must_be_nil
+    end
   end
 end

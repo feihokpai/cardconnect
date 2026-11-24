@@ -125,6 +125,22 @@ describe CardConnect::Service::Profile do
         capture_io { service.submit.must_be_nil }
         service.response.must_be_nil
       end
+
+      it 'raises the server error when the api fails' do
+        server_error = [500, { 'Content-Type' => 'application/json' }, '{"resptext":"Internal server error"}']
+        path = ['/cardconnect/rest/profile', valid_profile_request['profileid'],
+                valid_profile_request['acctid'], valid_profile_request['merchid']].join('/')
+
+        connection = CardConnect::Connection.new.connection do |stubs|
+          stubs.delete(path) { server_error }
+        end
+
+        service = CardConnect::Service::Profile.new('delete', connection)
+        service.build_request(valid_profile_request)
+
+        proc { service.submit }.must_raise Faraday::ServerError
+        service.response.must_be_nil
+      end
     end
   end
 
