@@ -8,6 +8,7 @@
 * Removes the `bundler` development dependency, which pinned Bundler to 1.x and made `bundle install` fail on Ruby 3.
 * Constrains `minitest` to 5.x, since the test suite relies on the global expectations that Minitest 6 removed.
 * Fixes `InquireResponse#success?`, which reported success for transactions with `respstat` B (retry) or C (declined). The response now collects `resptext` into `errors`, like the other response classes.
+* Runs the test suite against `json` 3, so the compatibility fixed in this release stays verified.
 
 ## v2.4.2
 
