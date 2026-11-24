@@ -36,4 +36,27 @@ describe CardConnect::Service::CaptureResponse do
       @response.body.must_equal symbolize_keys(valid_capture_response)
     end
   end
+
+  describe '#success?' do
+    it 'should be true when the capture was approved' do
+      @response.success?.must_equal true
+    end
+
+    it 'should be false when the capture was not approved' do
+      %w[B C].each do |status|
+        response = CardConnect::Service::CaptureResponse.new(
+          valid_capture_response.merge('respstat' => status, 'resptext' => 'Not approved')
+        )
+
+        response.success?.must_equal false
+        response.errors.must_equal ['Not approved']
+      end
+    end
+  end
+
+  describe '#errors' do
+    it 'should be empty when the capture was approved' do
+      @response.errors.must_be_empty
+    end
+  end
 end
