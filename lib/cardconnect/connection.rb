@@ -1,5 +1,4 @@
 require 'faraday'
-require 'faraday_middleware'
 
 module CardConnect
   class Connection
@@ -9,7 +8,7 @@ module CardConnect
 
     def connection
       @connection ||= Faraday.new(faraday_options) do |f|
-        f.request :basic_auth, @config.api_username, @config.api_password
+        f.request :authorization, :basic, @config.api_username, @config.api_password
         f.request :json
 
         f.response :json, content_type: /\bjson$/
