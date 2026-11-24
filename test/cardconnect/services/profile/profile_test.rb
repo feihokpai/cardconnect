@@ -109,6 +109,22 @@ describe CardConnect::Service::Profile do
         @service.submit
         @service.response.must_be_kind_of CardConnect::Service::ProfileDeleteResponse
       end
+
+      it 'returns nil when the api responds with not found' do
+        not_found = [404, { 'Content-Type' => 'application/json' }, '{"resptext":"Not found"}']
+        path = ['/cardconnect/rest/profile', valid_profile_request['profileid'],
+                valid_profile_request['acctid'], valid_profile_request['merchid']].join('/')
+
+        connection = CardConnect::Connection.new.connection do |stubs|
+          stubs.delete(path) { not_found }
+        end
+
+        service = CardConnect::Service::Profile.new('delete', connection)
+        service.build_request(valid_profile_request)
+
+        capture_io { service.submit.must_be_nil }
+        service.response.must_be_nil
+      end
     end
   end
 

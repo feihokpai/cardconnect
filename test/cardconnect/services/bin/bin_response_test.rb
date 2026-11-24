@@ -64,4 +64,10 @@ describe CardConnect::Service::BinResponse do
       @response.body.must_equal symbolize_keys(valid_bin_response)
     end
   end
+
+  describe '#success?' do
+    it 'should be true when there are no errors' do
+      @response.success?.must_equal true
+    end
+  end
 end

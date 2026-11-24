@@ -68,5 +68,19 @@ describe CardConnect::Service::Authorization do
       service.response.body.must_equal symbolize_keys(valid_auth_response)
       service.response.must_be :success?
     end
+
+    it 'returns nil when the api responds with not found' do
+      not_found = [404, { 'Content-Type' => 'application/json' }, '{"resptext":"Not found"}']
+
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.put('/cardconnect/rest/auth') { not_found }
+      end
+
+      service = CardConnect::Service::Authorization.new(connection)
+      service.build_request(valid_auth_request)
+
+      capture_io { service.submit.must_be_nil }
+      service.response.must_be_nil
+    end
   end
 end

@@ -52,5 +52,20 @@ describe CardConnect::Service::Inquire do
       @service.submit
       @service.response.must_be_kind_of CardConnect::Service::InquireResponse
     end
+
+    it 'returns nil when the api responds with not found' do
+      not_found = [404, { 'Content-Type' => 'application/json' }, '{"resptext":"Not found"}']
+      path = "/cardconnect/rest/inquire/#{valid_inquire_request['retref']}/#{valid_inquire_request['merchid']}"
+
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.get(path) { not_found }
+      end
+
+      service = CardConnect::Service::Inquire.new(connection)
+      service.build_request(valid_inquire_request)
+
+      capture_io { service.submit.must_be_nil }
+      service.response.must_be_nil
+    end
   end
 end
