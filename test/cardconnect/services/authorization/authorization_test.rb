@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'json'
 
 describe CardConnect::Service::Authorization do
   before do
@@ -51,6 +52,21 @@ describe CardConnect::Service::Authorization do
       @service.build_request(valid_auth_request)
       @service.submit
       @service.response.must_be_kind_of CardConnect::Service::AuthorizationResponse
+    end
+
+    it 'parses the json response body sent by the api' do
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.put('/cardconnect/rest/auth') do
+          [200, { 'Content-Type' => 'application/json' }, JSON.generate(valid_auth_response)]
+        end
+      end
+
+      service = CardConnect::Service::Authorization.new(connection)
+      service.build_request(valid_auth_request)
+      service.submit
+
+      service.response.body.must_equal symbolize_keys(valid_auth_response)
+      service.response.must_be :success?
     end
   end
 end
