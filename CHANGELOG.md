@@ -2,12 +2,20 @@
 
 ## v2.5.0
 
+### Requirements
+
 * Upgrades `faraday` dependency from v1 to v2. `faraday_middleware` was dropped because its JSON middleware is now part of `faraday`, and `basic_auth` was replaced by the `authorization` middleware.
 * Requires `faraday` 2.14.4 or newer, the first version that passes JSON parser options as keywords and therefore works with `json` 3. Earlier `faraday` 2.x versions raise `Faraday::ParsingError` when parsing responses with `json` 3.
 * Requires Ruby 3.0 or newer, the minimum `faraday` supports since 2.9. Ruby 2.x is no longer supported.
+
+### Behavior changes
+
+* `InquireResponse#success?` now returns `false` when the queried transaction has `respstat` B (retry) or C (declined), and `errors` carries the API `resptext`. It previously returned `true` for every inquiry. Code that used `success?` only to know whether the inquiry request itself worked will now see `false` for declined transactions; use `setlstat` if you need the settlement state.
+
+### Other changes
+
 * Removes the `bundler` development dependency, which pinned Bundler to 1.x and made `bundle install` fail on Ruby 3.
 * Constrains `minitest` to 5.x, since the test suite relies on the global expectations that Minitest 6 removed.
-* Fixes `InquireResponse#success?`, which reported success for transactions with `respstat` B (retry) or C (declined). The response now collects `resptext` into `errors`, like the other response classes.
 * Adds the missing `errors` and `success?` to `CaptureResponse`, which had no way to report a declined (`respstat` C) or retry (`respstat` B) capture.
 * Runs the test suite against `json` 3, so the compatibility fixed in this release stays verified.
 

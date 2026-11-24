@@ -109,6 +109,11 @@ Example:
 service = CardConnect::Service::Inquire.new
 service.build_request(params)
 response = service.submit
+
+# success? reflects the transaction status, not only the inquiry itself:
+# it is false when the transaction has respstat B (retry) or C (declined).
+response.success?
+response.errors
 ```
 
 ### Settlement Status Service
