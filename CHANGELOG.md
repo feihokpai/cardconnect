@@ -5,6 +5,7 @@
 * Upgrades `faraday` dependency from v1 to v2. `faraday_middleware` was dropped because its JSON middleware is now part of `faraday`, and `basic_auth` was replaced by the `authorization` middleware.
 * Requires `faraday` 2.14.4 or newer, the first version that passes JSON parser options as keywords and therefore works with `json` 3. Earlier `faraday` 2.x versions raise `Faraday::ParsingError` when parsing responses with `json` 3.
 * Requires Ruby 3.0 or newer, the minimum `faraday` supports since 2.9. Ruby 2.x is no longer supported.
+* Removes the `bundler` development dependency, which pinned Bundler to 1.x and made `bundle install` fail on Ruby 3.
 
 ## v2.4.2
 
