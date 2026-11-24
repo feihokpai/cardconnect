@@ -15,23 +15,14 @@ CardConnect.configure do |config|
   config.endpoint = 'https://test.host'
 end
 
-# Stub out the Faraday connection for testing.
-module CardConnect
-  class Connection
-    undef :connection if method_defined? :connection
-
-    def connection
-      @connection ||= Faraday.new(faraday_options) do |faraday|
-        faraday.request :authorization, :basic, @config.api_username, @config.api_password
-        faraday.request :json
-
-        faraday.response :json, content_type: /\bjson$/
-        faraday.response :raise_error
-
-        faraday.adapter :test do |stubs|
-          yield(stubs)
-        end
-      end
+# Swap the real connection's adapter for Faraday's test adapter, keeping the
+# production middleware stack under test.
+module StubbedConnection
+  def connection(&block)
+    @connection ||= super.tap do |connection|
+      connection.builder.adapter(:test) { |stubs| block.call(stubs) } if block
     end
   end
 end
+
+CardConnect::Connection.prepend(StubbedConnection)
