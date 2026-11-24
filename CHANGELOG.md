@@ -3,6 +3,7 @@
 ## v2.5.0
 
 * Upgrades `faraday` dependency from v1 to v2. `faraday_middleware` was dropped because its JSON middleware is now part of `faraday`, and `basic_auth` was replaced by the `authorization` middleware.
+* Requires `faraday` 2.14.4 or newer, the first version that passes JSON parser options as keywords and therefore works with `json` 3. Earlier `faraday` 2.x versions raise `Faraday::ParsingError` when parsing responses with `json` 3.
 
 ## v2.4.2
 
