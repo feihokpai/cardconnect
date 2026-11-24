@@ -82,8 +82,19 @@ describe CardConnect::Service::InquireResponse do
   end
 
   describe '#success?' do
-    it 'should be true when there are no errors' do
+    it 'should be true when the transaction was approved' do
       @response.success?.must_equal true
+    end
+
+    it 'should be false when the transaction was not approved' do
+      %w[B C].each do |status|
+        response = CardConnect::Service::InquireResponse.new(
+          valid_inquire_response.merge('respstat' => status, 'resptext' => 'Not approved')
+        )
+
+        response.success?.must_equal false
+        response.errors.must_equal ['Not approved']
+      end
     end
   end
 end

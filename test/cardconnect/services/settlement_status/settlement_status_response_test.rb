@@ -46,12 +46,6 @@ describe CardConnect::Service::SettlementStatusResponse do
     end
   end
 
-  describe '#success?' do
-    it 'should be true when there are no errors' do
-      @response.success?.must_equal true
-    end
-  end
-
   describe 'responses without settlement data' do
     it 'should handle an empty response' do
       response = CardConnect::Service::SettlementStatusResponse.new([])

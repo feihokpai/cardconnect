@@ -18,12 +18,17 @@ module CardConnect
       VOIDED      = 'Voided' # Txn has been voided
       DECLINED    = 'Declined' # Txn had an error
 
+      # Response Status
+      STATUS_RETRY    = 'B'.freeze
+      STATUS_DECLINED = 'C'.freeze
+
       attr_accessor(*FIELDS)
       attr_reader :errors
 
       def initialize(response)
         set_attributes(response, FIELDS)
         @errors = []
+        process_errors
       end
 
       def success?
@@ -32,6 +37,12 @@ module CardConnect
 
       def body
         FIELDS.collect{|attr| {attr => send(attr)} }.reduce({}, :merge)
+      end
+
+      private
+
+      def process_errors
+        @errors << resptext if [STATUS_RETRY, STATUS_DECLINED].include?(respstat)
       end
     end
   end

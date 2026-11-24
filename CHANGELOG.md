@@ -7,6 +7,7 @@
 * Requires Ruby 3.0 or newer, the minimum `faraday` supports since 2.9. Ruby 2.x is no longer supported.
 * Removes the `bundler` development dependency, which pinned Bundler to 1.x and made `bundle install` fail on Ruby 3.
 * Constrains `minitest` to 5.x, since the test suite relies on the global expectations that Minitest 6 removed.
+* Fixes `InquireResponse#success?`, which reported success for transactions with `respstat` B (retry) or C (declined). The response now collects `resptext` into `errors`, like the other response classes.
 
 ## v2.4.2
 
