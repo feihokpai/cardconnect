@@ -122,10 +122,11 @@ describe CardConnect::Service::Profile do
         service = CardConnect::Service::Profile.new('delete', connection)
         service.build_request(valid_profile_request)
 
-        out, _err = capture_io { service.submit.must_be_nil }
+        out, err = capture_io { service.submit.must_be_nil }
 
-        out.must_include '404'
-        out.must_include path
+        out.must_be_empty
+        err.must_include '404'
+        err.must_include path
         service.response.must_be_nil
       end
 

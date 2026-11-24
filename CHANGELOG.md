@@ -11,6 +11,7 @@
 ### Behavior changes
 
 * `InquireResponse#success?` now returns `false` when the queried transaction has `respstat` B (retry) or C (declined), and `errors` carries the API `resptext`. It previously returned `true` for every inquiry. Code that used `success?` only to know whether the inquiry request itself worked will now see `false` for declined transactions; use `setlstat` if you need the settlement state.
+* The service endpoints write the `Faraday::ResourceNotFound` message to stderr instead of stdout, and `submit` still returns `nil` in that case. They use `$stderr.puts` rather than `Kernel#warn`, which is silenced when warnings are disabled with `-W0`.
 
 ### Other changes
 

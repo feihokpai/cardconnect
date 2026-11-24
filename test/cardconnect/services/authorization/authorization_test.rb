@@ -79,11 +79,35 @@ describe CardConnect::Service::Authorization do
       service = CardConnect::Service::Authorization.new(connection)
       service.build_request(valid_auth_request)
 
-      out, _err = capture_io { service.submit.must_be_nil }
+      out, err = capture_io { service.submit.must_be_nil }
 
-      out.must_include '404'
-      out.must_include '/cardconnect/rest/auth'
+      out.must_be_empty
+      err.must_include '404'
+      err.must_include '/cardconnect/rest/auth'
       service.response.must_be_nil
+    end
+
+    it 'writes the message even when warnings are disabled' do
+      not_found = [404, { 'Content-Type' => 'application/json' }, '{"resptext":"Not found"}']
+
+      connection = CardConnect::Connection.new.connection do |stubs|
+        stubs.put('/cardconnect/rest/auth') { not_found }
+      end
+
+      service = CardConnect::Service::Authorization.new(connection)
+      service.build_request(valid_auth_request)
+
+      verbose = $VERBOSE
+      begin
+        $VERBOSE = nil
+        out, err = capture_io { service.submit.must_be_nil }
+      ensure
+        $VERBOSE = verbose
+      end
+
+      out.must_be_empty
+      err.must_include '404'
+      err.must_include '/cardconnect/rest/auth'
     end
 
     it 'raises the client error when the api rejects the credentials' do
