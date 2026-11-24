@@ -15,14 +15,31 @@ module CardConnect
       ACCEPTED      = 'Accepted' # Accepted by the Processor
       REJECTED      = 'Rejected' # Rejected by the Processor
 
+      # Response Status
+      STATUS_RETRY    = 'B'.freeze
+      STATUS_DECLINED = 'C'.freeze
+
       attr_accessor(*FIELDS)
+      attr_reader :errors
 
       def initialize(response)
         set_attributes(response, FIELDS)
+        @errors = []
+        process_errors
+      end
+
+      def success?
+        @errors.empty?
       end
 
       def body
         FIELDS.collect{|attr| {attr => send(attr)} }.reduce({}, :merge)
+      end
+
+      private
+
+      def process_errors
+        @errors << resptext if [STATUS_RETRY, STATUS_DECLINED].include?(respstat)
       end
     end
   end

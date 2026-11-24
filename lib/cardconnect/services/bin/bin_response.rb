@@ -20,7 +20,6 @@ module CardConnect
       def initialize(response)
 
         set_attributes(response, FIELDS)
-       # raise [response, self].inspect
         @errors = []
       end
 

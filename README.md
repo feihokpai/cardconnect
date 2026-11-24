@@ -4,9 +4,11 @@ CardConnect API Ruby Client
 
 [![Gem Version](https://badge.fury.io/rb/cardconnect.svg)](http://badge.fury.io/rb/cardconnect)
 [![Code Climate](https://codeclimate.com/github/mobilecause/cardconnect/badges/gpa.svg)](https://codeclimate.com/github/mobilecause/cardconnect)
-[![Build Status](https://travis-ci.org/mobilecause/cardconnect.svg?branch=master)](https://travis-ci.org/mobilecause/cardconnect)
+[![Build Status](https://github.com/feihokpai/cardconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/feihokpai/cardconnect/actions/workflows/ci.yml)
 
 ## Installation
+
+This gem requires Ruby 3.0 or newer.
 
 Add this line to your application's Gemfile:
 
@@ -107,6 +109,11 @@ Example:
 service = CardConnect::Service::Inquire.new
 service.build_request(params)
 response = service.submit
+
+# success? reflects the transaction status, not only the inquiry itself:
+# it is false when the transaction has respstat B (retry) or C (declined).
+response.success?
+response.errors
 ```
 
 ### Settlement Status Service

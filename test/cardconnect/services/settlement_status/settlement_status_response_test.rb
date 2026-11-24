@@ -45,4 +45,20 @@ describe CardConnect::Service::SettlementStatusResponse do
       @response.body.must_equal valid_payload
     end
   end
+
+  describe 'responses without settlement data' do
+    it 'should handle an empty response' do
+      response = CardConnect::Service::SettlementStatusResponse.new([])
+
+      response.txns.must_be_nil
+      response.success?.must_equal true
+    end
+
+    it 'should not parse transactions when the response has none' do
+      response = CardConnect::Service::SettlementStatusResponse.new([{ 'merchid' => '000000927996' }])
+
+      response.merchid.must_equal '000000927996'
+      response.txns.must_be_nil
+    end
+  end
 end

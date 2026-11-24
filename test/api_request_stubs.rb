@@ -29,6 +29,9 @@ def valid_auth_request # rubocop:disable Metrics/MethodLength
     'authcode' => '123456',
     'invoiceid' => '000000000001',
     'taxamnt' => '0',
+    'cof' => 'C',
+    'cofpermission' => 'Y',
+    'cofscheduled' => 'N',
     'userfields' => [
       {
         'name0' => 'value0'
