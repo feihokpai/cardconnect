@@ -8,6 +8,8 @@ CardConnect API Ruby Client
 
 ## Installation
 
+This gem requires Ruby 3.0 or newer.
+
 Add this line to your application's Gemfile:
 
 ```ruby
